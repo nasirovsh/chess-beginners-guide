@@ -1,0 +1,1119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chess for Beginners</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .chess-board {
+            display: grid;
+            grid-template-columns: repeat(8, 1fr);
+            grid-template-rows: repeat(8, 1fr);
+            width: 400px;
+            height: 400px;
+            border: 2px solid #333;
+            background-size: 100% 100%;
+        }
+        .square {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+        .light {
+            background-color: #f0d9b5;
+        }
+        .dark {
+            background-color: #b58863;
+        }
+        .highlight {
+            background-color: rgba(0, 255, 0, 0.3);
+        }
+        .possible-move {
+            position: absolute;
+            width: 30%;
+            height: 30%;
+            border-radius: 50%;
+            background-color: rgba(0, 0, 0, 0.3);
+        }
+        .possible-capture {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 0;
+            background-color: rgba(255, 0, 0, 0.3);
+            border: 2px solid rgba(255, 0, 0, 0.7);
+            box-sizing: border-box;
+        }
+        .piece {
+            width: 80%;
+            height: 80%;
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            cursor: pointer;
+            transition: transform 0.2s;
+            z-index: 10;
+        }
+        .piece:hover {
+            transform: scale(1.1);
+        }
+        .selected {
+            background-color: rgba(255, 255, 0, 0.4);
+        }
+        .tutorial-step {
+            display: none;
+        }
+        .tutorial-step.active {
+            display: block;
+        }
+        .progress-bar {
+            height: 10px;
+            background-color: #e5e7eb;
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        .progress {
+            height: 100%;
+            background-color: #3b82f6;
+            transition: width 0.3s;
+        }
+        .flip-board {
+            transform: rotate(180deg);
+        }
+        .flip-piece {
+            transform: rotate(180deg);
+        }
+        .move-indicator {
+            position: absolute;
+            width: 30%;
+            height: 30%;
+            border-radius: 50%;
+            background-color: rgba(0, 0, 255, 0.5);
+            z-index: 5;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen">
+    <header class="bg-gray-900 text-white py-6">
+        <div class="container mx-auto px-4">
+            <h1 class="text-3xl font-bold text-center">Chess for Beginners</h1>
+            <p class="text-center mt-2 text-gray-300">Learn, practice, and master the royal game</p>
+        </div>
+    </header>
+
+    <main class="container mx-auto px-4 py-8">
+        <div class="flex flex-col lg:flex-row gap-8">
+            <!-- Navigation -->
+            <nav class="lg:w-1/4 bg-white p-6 rounded-lg shadow-md h-fit sticky top-4">
+                <h2 class="text-xl font-bold mb-4 text-gray-800">Learning Path</h2>
+                <ul class="space-y-2">
+                    <li>
+                        <button onclick="showSection('intro')" class="w-full text-left px-4 py-2 bg-blue-100 text-blue-800 rounded-md font-medium">
+                            <i class="fas fa-chess-board mr-2"></i> Introduction
+                        </button>
+                    </li>
+                    <li>
+                        <button onclick="showSection('pieces')" class="w-full text-left px-4 py-2 hover:bg-gray-100 rounded-md">
+                            <i class="fas fa-chess-pawn mr-2"></i> Chess Pieces
+                        </button>
+                    </li>
+                    <li>
+                        <button onclick="showSection('moves')" class="w-full text-left px-4 py-2 hover:bg-gray-100 rounded-md">
+                            <i class="fas fa-arrows-alt mr-2"></i> Basic Moves
+                        </button>
+                    </li>
+                    <li>
+                        <button onclick="showSection('special')" class="w-full text-left px-4 py-2 hover:bg-gray-100 rounded-md">
+                            <i class="fas fa-star mr-2"></i> Special Rules
+                        </button>
+                    </li>
+                    <li>
+                        <button onclick="showSection('practice')" class="w-full text-left px-4 py-2 hover:bg-gray-100 rounded-md">
+                            <i class="fas fa-dumbbell mr-2"></i> Practice
+                        </button>
+                    </li>
+                    <li>
+                        <button onclick="showSection('quiz')" class="w-full text-left px-4 py-2 hover:bg-gray-100 rounded-md">
+                            <i class="fas fa-question-circle mr-2"></i> Quiz
+                        </button>
+                    </li>
+                </ul>
+
+                <div class="mt-8">
+                    <h3 class="font-bold mb-2">Your Progress</h3>
+                    <div class="progress-bar mb-2">
+                        <div id="progress" class="progress" style="width: 10%;"></div>
+                    </div>
+                    <p class="text-sm text-gray-600">10% completed</p>
+                </div>
+            </nav>
+
+            <!-- Content Area -->
+            <div class="lg:w-3/4">
+                <!-- Introduction Section -->
+                <section id="intro" class="section-content bg-white p-6 rounded-lg shadow-md mb-8">
+                    <h2 class="text-2xl font-bold mb-4 text-gray-800">Welcome to Chess!</h2>
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <p class="mb-4">Chess is a two-player strategy game played on an 8x8 checkered board with 64 squares. Each player begins with 16 pieces: one king, one queen, two rooks, two bishops, two knights, and eight pawns.</p>
+                            <p class="mb-4">The objective is to checkmate your opponent's king, which means the king is in a position to be captured ("in check") and there is no legal move to escape the threat.</p>
+                            <div class="bg-blue-50 p-4 rounded-md border border-blue-200">
+                                <h3 class="font-bold text-blue-800 mb-2">Did you know?</h3>
+                                <p>Chess is believed to have originated in India around the 6th century AD as "chaturanga" and spread to Persia, then to the Islamic world, and eventually to Europe.</p>
+                            </div>
+                        </div>
+                        <div class="flex justify-center">
+                            <div class="chess-board" id="intro-board">
+                                <!-- Board will be generated by JavaScript -->
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mt-6 flex justify-between">
+                        <button class="px-4 py-2 bg-gray-200 rounded-md hover:bg-gray-300" disabled>
+                            <i class="fas fa-arrow-left mr-2"></i> Previous
+                        </button>
+                        <button onclick="showSection('pieces')" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
+                            Next: Chess Pieces <i class="fas fa-arrow-right ml-2"></i>
+                        </button>
+                    </div>
+                </section>
+
+                <!-- Chess Pieces Section -->
+                <section id="pieces" class="section-content bg-white p-6 rounded-lg shadow-md mb-8 hidden">
+                    <h2 class="text-2xl font-bold mb-4 text-gray-800">Chess Pieces</h2>
+                    <p class="mb-6">Each chess piece has its own way of moving. Let's learn about each one:</p>
+                    
+                    <div class="tutorial-steps">
+                        <!-- Step 1: Pawn -->
+                        <div class="tutorial-step active" data-step="1">
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div>
+                                    <h3 class="text-xl font-bold mb-2 flex items-center">
+                                        The Pawn 
+                                        <span class="ml-2 w-10 h-10 bg-cover" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/4/45/Chess_plt45.svg')"></span>
+                                    </h3>
+                                    <p class="mb-4">Pawns are the most numerous pieces in chess. Each player starts with eight pawns.</p>
+                                    <ul class="list-disc pl-5 mb-4 space-y-1">
+                                        <li>Moves forward one square, but captures diagonally</li>
+                                        <li>On its first move, it can move forward two squares</li>
+                                        <li>If it reaches the opposite side of the board, it can be promoted to any other piece (except king)</li>
+                                    </ul>
+                                    <div class="bg-yellow-50 p-4 rounded-md border border-yellow-200">
+                                        <h4 class="font-bold text-yellow-800 mb-2">Remember:</h4>
+                                        <p>Pawns are the only pieces that capture differently than they move.</p>
+                                    </div>
+                                </div>
+                                <div class="flex flex-col items-center">
+                                    <div class="chess-board mb-4" id="pawn-board">
+                                        <!-- Board for pawn demonstration -->
+                                    </div>
+                                    <button onclick="showPawnMoves()" class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700">
+                                        Show Pawn Moves
+                                    </button>
+                                    <button onclick="resetPawnBoard()" class="mt-2 px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700">
+                                        Reset Board
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Step 2: Rook -->
+                        <div class="tutorial-step" data-step="2">
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div>
+                                    <h3 class="text-xl font-bold mb-2 flex items-center">
+                                        The Rook
+                                        <span class="ml-2 w-10 h-10 bg-cover" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/7/72/Chess_rlt45.svg')"></span>
+                                    </h3>
+                                    <p class="mb-4">Rooks are powerful pieces that can control entire ranks and files.</p>
+                                    <ul class="list-disc pl-5 mb-4 space-y-1">
+                                        <li>Moves any number of squares horizontally or vertically</li>
+                                        <li>Participates in a special move called "castling" with the king</li>
+                                        <li>Very powerful in the endgame when there are open files</li>
+                                    </ul>
+                                    <div class="bg-yellow-50 p-4 rounded-md border border-yellow-200">
+                                        <h4 class="font-bold text-yellow-800 mb-2">Remember:</h4>
+                                        <p>Rooks work best when they're connected (protecting each working) and on open files.</p>
+                                    </div>
+                                </div>
+                                <div class="flex flex-col items-center">
+                                    <div class="chess-board mb-4" id="rook-board">
+                                        <!-- Board for rook demonstration -->
+                                    </div>
+                                    <button onclick="showRookMoves()" class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700">
+                                        Show Rook Moves
+                                    </button>
+                                    <button onclick="resetRookBoard()" class="mt-2 px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700">
+                                        Reset Board
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Step 3: Knight -->
+                        <div class="tutorial-step" data-step="3">
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div>
+                                    <h3 class="text-xl font-bold mb-2 flex items-center">
+                                        The Knight 
+                                        <span class="ml-2 w-10 h-10 bg-cover" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/7/70/Chess_nlt45.svg')"></span>
+                                    </h3>
+                                    <p class="mb-4">Knights are the only pieces that can jump over other pieces.</p>
+                                    <ul class="list-disc pl-5 mb-4 space-y-1">
+                                        <li>Moves in an "L-shape": two squares in one direction, then one square perpendicular</li>
+                                        <li>Can jump over other pieces</li>
+                                        <li>Most effective in closed positions with many pieces</li>
+                                    </ul>
+                                    <div class="bg-yellow-50 p-4 rounded-md border border-yellow-200">
+                                        <h4 class="font-bold text-yellow-800 mb-2">Remember:</h4>
+                                        <p>Knights are strongest in the center of the board where they have up to 8 possible moves.</p>
+                                    </div>
+                                </div>
+                                <div class="flex flexocol items-center">
+                                    <div class="chess-board mb-4" id="knight-board">
+                                        <!-- Board for knight demonstration -->
+                                    </div>
+                                    <button onclick="showKnightMoves()" class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700">
+                                        Show Knight Moves
+                                    </button>
+                                    <button onclick="resetKnightBoard()" class="mt-2 px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700">
+                                        Reset Board
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Step 4: Bishop -->
+                        <div class="tutorial-step" data-step="4">
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div>
+                                    <h3 class="text-xl font-bold mb-2 flex items-center">
+                                        The Bishop
+                                        <span class="ml-2 w-10 h-10 bg-cover" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/b/b1/Chess_blt45.svg')"></span>
+                                    </h3>
+                                    <p class="mb-4">Bishops are long-range pieces that move diagonally.</p>
+                                    <ul class="list-disc pl-5 mb-4 space-y-1">
+                                        <li>Moves any number of squares diagonally</li>
+                                        <li>Each player starts with one light-squared and one dark-squared bishop</li>
+                                        <li>Works well in open positions with few central pawns</li>
+                                    </ul>
+                                    <div class="bg-yellow-50 p-4 rounded-md border border-yellow-200">
+                                        <h4 class="font-bold text-yellow-800 mb-2">Remember:</h4>
+                                        <p>A bishop pair (both bishops) is often a strong advantage in open positions.</p>
+                                    </div>
+                                </div>
+                                <div class="flex flex-col items-center">
+                                    <div class="chess-board mb-4" id="bishop-board">
+                                        <!-- Board for bishop demonstration -->
+                                    </div>
+                                    <button onclick="showBishopMoves()" class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700">
+                                        Show Bishop Moves
+                                    </button>
+                                    <button onclick="resetBishopBoard()" class="mt-2 px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700">
+                                        Reset Board
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Step 5: Queen -->
+                        <div class="tutorial-step" data-step="5">
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div>
+                                    <h3 class="text-xl font-bold mb-2 flex items-center">
+                                        The Queen
+                                        <span class="ml-2 w-10 h-10 bg-cover" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/1/15/Chess_qlt45.svg')"></span>
+                                    </h3>
+                                    <p class="mb-4">The queen is the most powerful piece in chess.</p>
+                                    <ul class="list-disc pl-5 mb-4 space-y-1">
+                                        <li>Combines the moves of a rook and bishop</li>
+                                        <li>Can move any number of squares horizontally, vertically,or diagonally</li>
+                                        <li>Very valuable - usually not brought out too early to avoid attacks</li>
+                                    </ul>
+                                    <div class="bg-yellow-50 p-4 rounded-md border border-yellow-200">
+                                        <h4 class="font-bold text-yellow-800 mb-2">Remember:</h4>
+                                        <p>Don't bring your queen out too early - it can be chased around by minor pieces.</p>
+                                    </div>
+                                </div>
+                                <div class="flex flex-col items-center">
+                                    <div class="chess-board mb-4" id="queen-board">
+                                        <!-- Board for queen demonstration -->
+                                    </div>
+                                    <button onclick="showQueenMoves()" class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700">
+                                        Show Queen Moves
+                                    </button>
+                                    <button onclick="resetQueenBoard()" class="mt-2 px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700">
+                                        Reset Board
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Step 6: King -->
+                        <div class="tutorial-step" data-step="6">
+                            <div class="grid md:grid-cols-2 gap-6">
+                                <div>
+                                    <h3 class="text-xl font-bold mb-2 flex items-center">
+                                        The King 
+                                        <span class="ml-2 w-10 h-10 bg-cover" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/4/42/Chess_klt45.svg')"></span>
+                                    </h3>
+                                    <p class="mb-4">The king is the most important piece - if it's checkmated, the game is over.</p>
+                                    <ul class="list-disc pl-5 mb-4 space-y-1">
+                                        <li>Moves one square in any direction</li>
+                                        <li>Cannot move into check (a square attacked by an opponent's piece)</li>
+                                        <li>Participates in a special move called "castling" with a rook</li>
+                                    </ul>
+                                    <div class="bg-yellow-50 p-4 rounded-md border border-yellow-200">
+                                        <h4 class="font-bold text-yellow-800 mb-2">Remember:</h4>
+                                        <p>In the endgame, the king becomes an active piece and should be centralized.</p>
+                                    </div>
+                                </div>
+                                <div class="flex flex-col items-center">
+                                    <div class="chess-board mb-4" id="king-board">
+                                        <!-- Board for king demonstration -->
+                                    </div>
+                                    <button onclick="showKingMoves()" class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700">
+                                        Show King Moves
+                                    </button>
+                                    <button onclick="resetKingBoard()" class="mt-2 px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700">
+                                        Reset Board
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-6 flex justify-between">
+                        <button onclick="prevPieceStep()" class="px-4 py-2 bg-gray-200 rounded-md hover:bg-gray-300">
+                            <i class="fas fa-arrow-left mr-2"></i> Previous
+                        </button>
+                        <button onclick="nextPieceStep()" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
+                            Next <i class="fas fa-arrow-right ml-2"></i>
+                        </button>
+                    </div>
+                </section>
+
+                <!-- Basic Moves Section -->
+                <section id="moves" class="section-content bg-white p-6 rounded-lg shadow-md mb-8 hidden">
+                    <h2 class="text-2xl font-bold mb-4 text-gray-800">Basic Chess Moves</h2>
+                    <!-- Rest of the content remains the same -->
+                    <!-- ... -->
+                </section>
+
+                <!-- Rest of the sections remain the same -->
+                <!-- ... -->
+
+            </div>
+        </div>
+    </main>
+
+    <footer class="bg-gray-900 text-white py-6 mt-12">
+        <div class="container mx-auto px-4 text-center">
+            <p>© 2023 Chess for Beginners | Created with ♟️ by Chess Enthusiasts</p>
+            <div class="flex justify-center space-x-4 mt-4">
+                <a href="#" class="hover:text-blue-400"><i class="fab fa-twitter"></i></a>
+                <a href="#" class="hover:text-blue-600"><i class="fab fa-facebook"></i></a>
+                <a href="#" class="hover:text-red-500"><i class="fab fa-youtube"></i></a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Chess piece images object
+        const pieceImages = {
+            'wP': 'https://upload.wikimedia.org/wikipedia/commons/4/45/Chess_plt45.svg',
+            'wR': 'https://upload.wikimedia.org/wikipedia/commons/7/72/Chess_rlt45.svg',
+            'wN': 'https://upload.wikimedia.org/wikipedia/commons/7/70/Chess_nlt45.svg',
+            'wB': 'https://upload.wikimedia.org/wikipedia/commons/b/b1/Chess_blt45.svg',
+            'wQ': 'https://upload.wikimedia.org/wikipedia/commons/1/15/Chess_qlt45.svg',
+            'wK': 'https://upload.wikimedia.org/wikipedia/commons/4/42/Chess_klt45.svg',
+            'bP': 'https://upload.wikimedia.org/wikipedia/commons/c/c7/Chess_pdt45.svg',
+            'bR': 'https://upload.wikimedia.org/wikipedia/commons/f/ff/Chess_rdt45.svg',
+            'bN': 'https://upload.wikimedia.org/wikipedia/commons/e/ef/Chess_ndt45.svg',
+            'bB': 'https://upload.wikimedia.org/wikipedia/commons/9/98/Chess_bdt45.svg',
+            'bQ': 'https://upload.wikimedia.org/wikipedia/commons/4/47/Chess_qdt45.svg',
+            'bK': 'https://upload.wikimedia.org/wikipedia/commons/f/f0/Chess_kdt45.svg',
+        };
+
+        // Global variables
+        let currentPieceStep = 1;
+        let currentPracticeStep = 1;
+        let correctAnswers = 0;
+        let wrongAnswers = 0;
+        let currentPieceToIdentify = '';
+        let currentPracticePiece = '';
+        let currentPracticeMoves = [];
+        let currentCheckmateSolution = '';
+        let quizSubmitted = false;
+        let selectedPiece = null;
+        let possibleMoves = [];
+
+        // Initialize the page
+        document.addEventListener('DOMContentLoaded', function() {
+            // Show the first section
+            showSection('intro');
+            
+            // Initialize progress bar
+            updateProgressBar(10);
+            
+            // Initialize chess boards with images
+            initChessBoards();
+            
+            // Set up event listeners for piece boards
+            setupPieceBoards();
+        });
+
+        // Initialize chess boards with piece images
+        function initChessBoards() {
+            initializeBoard('intro-board', [
+                ['bR', 'bN', 'bB', 'bQ', 'bK', 'bB', 'bN', 'bR'],
+                ['bP', 'bP', 'bP', 'bP', 'bP', 'bP', 'bP', 'bP'],
+                ['', '', '', '', '', '', '', ''],
+                ['', '', '', '', '', '', '', ''],
+                ['', '', '', '', '', '', '', ''],
+                ['', '', '', '', '', '', '', ''],
+                ['wP', 'wP', 'wP', 'wP', 'wP', 'wP', 'wP', 'wP'],
+                ['wR', 'wN', 'wB', 'wQ', 'wK', 'wB', 'wN', 'wR']
+            ]);
+            
+            initializeBoard('pawn-board', [
+                ['', '', '', '', '', '', '', ''],
+                ['', '', '', '', '', '', '', ''],
+                ['', '', '', '', '', '', '', ''],
+                ['', '', '', 'wP', '', '', '', ''],
+                ['', '', 'bP', '', 'bP', '', '', ''],
+                ['', '', '', '', '', '', '', ''],
+                ['', '', '', '', '', '', '', ''],
+                ['', '', '', '', '', '', '', '']
+            ]);
+            
+            initializeBoard('rook-board', [
+                ['', '', '', '', '', '', '', ''],
+                ['', '', '', '', '', '', '', ''],
+                ['', '', '', '', '', '', '', ''],
+                ['', '', '', 'wR', '', '', '', ''],
+                ['', '', 'bP', '', 'bP', '', '', ''],
+                ['', '', '', '', '', '', '', ''],
+                ['', '', '', '', '', '', '', ''],
+                ['', '', '', '', '', '', '', '']
+            ]);
+            
+            initializeBoard('knight-board', [
+                ['', '', '', '', '', '', '', ''],
+                ['', '', '', '', '', '', '', ''],
+                ['', '', '', '', '', '', '', ''],
+                ['', '', '', 'wN', '', '', '', ''],
+                ['', '', 'bP', '', 'bP', '', '', ''],
+                ['', '', '', '', '', '', '', ''],
+                ['', '', '', '', '', '', '', ''],
+                ['', '', '', '', '', '', '', '']
+            ]);
+            
+            initializeBoard('bishop-board', [
+                ['', '', '', '', '', '', '', ''],
+                ['', '', '', '', '', '', '', ''],
+                ['', '', '', '', '', '', '', ''],
+                ['', '', '', 'wB', '', '', '', ''],
+                ['', '', 'bP', '', 'bP', '', '', ''],
+                ['', '', '', '', '', '', '', ''],
+                ['', '', '', '', '', '', '', ''],
+                ['', '', '', '', '', '', '', '']
+            ]);
+            
+            initializeBoard('queen-board', [
+                ['', '', '', '', '', '', '', ''],
+                ['', '', '', '', '', '', '', ''],
+                ['', '', '', '', '', '', '', ''],
+                ['', '', '', 'wQ', '', '', '', ''],
+                ['', '', 'bP', '', 'bP', '', '', ''],
+                ['', '', '', '', '', '', '', ''],
+                ['', '', '', '', '', '', '', ''],
+                ['', '', '', '', '', '', '', '']
+            ]);
+            
+            initializeBoard('king-board', [
+                ['', '', '', '', '', '', '', ''],
+                ['', '', '', '', '', '', '', ''],
+                ['', '', '', '', '', '', '', ''],
+                ['', '', '', 'wK', '', '', '', ''],
+                ['', '', 'bP', '', 'bP', '', '', ''],
+                ['', '', '', '', '', '', '', ''],
+                ['', '', '', '', '', '', '', ''],
+                ['', '', '', '', '', '', '', '']
+            ]);
+        }
+
+        // Helper function to create a chess board with pieces
+        function initializeBoard(boardId, piecePositions) {
+            const board = document.getElementById(boardId);
+            board.innerHTML = '';
+            
+            for (let row = 0; row < 8; row++) {
+                for (let col = 0; col < 8; col++) {
+                    const square = document.createElement('div');
+                    square.className = `square ${(row + col) % 2 === 0 ? 'light' : 'dark'}`;
+                    square.dataset.row = row;
+                    square.dataset.col = col;
+                    
+                    const piece = piecePositions[row][col];
+                    if (piece) {
+                        const pieceElement = document.createElement('div');
+                        pieceElement.className = 'piece';
+                        pieceElement.dataset.piece = piece;
+                        pieceElement.style.backgroundImage = `url('${pieceImages[piece]}')`;
+                        square.appendChild(pieceElement);
+                    }
+                    
+                    board.appendChild(square);
+                }
+            }
+        }
+
+        // Set up event listeners for piece boards
+        function setupPieceBoards() {
+            const boards = ['pawn-board', 'rook-board', 'knight-board', 'bishop-board', 'queen-board', 'king-board'];
+            
+            boards.forEach(boardId => {
+                const board = document.getElementById(boardId);
+                if (board) {
+                    board.addEventListener('click', handleBoardClick);
+                }
+            });
+        }
+
+        // Handle board clicks
+        function handleBoardClick(event) {
+            const square = event.target.closest('.square');
+            if (!square) return;
+            
+            const row = parseInt(square.dataset.row);
+            const col = parseInt(square.dataset.col);
+            const pieceElement = square.querySelector('.piece');
+            
+            // If clicking on a piece
+            if (pieceElement && pieceElement.dataset.piece.startsWith('w')) {
+                // Select the piece
+                selectPiece(square, pieceElement);
+            } 
+            // If clicking on a possible move
+            else if (selectedPiece && possibleMoves.some(move => move.row === row && move.col === col)) {
+                // Make the move
+                makeMove(row, col);
+            }
+        }
+
+        // Select a piece and show possible moves
+        function selectPiece(square, pieceElement) {
+            // Clear previous selection
+            clearSelection();
+            
+            // Set new selection
+            selectedPiece = {
+                element: pieceElement,
+                square: square,
+                row: parseInt(square.dataset.row),
+                col: parseInt(square.dataset.col),
+                type: pieceElement.dataset.piece[1]
+            };
+            
+            square.classList.add('selected');
+            
+            // Calculate possible moves
+            possibleMoves = calculatePossibleMoves(selectedPiece.row, selectedPiece.col, selectedPiece.type);
+            
+            // Show possible moves
+            showPossibleMoves(possibleMoves);
+        }
+
+        // Clear selection and possible moves
+        function clearSelection() {
+            if (selectedPiece) {
+                selectedPiece.square.classList.remove('selected');
+                
+                // Remove all possible move indicators
+                const board = selectedPiece.square.parentElement;
+                board.querySelectorAll('.possible-move, .possible-capture').forEach(indicator => {
+                    indicator.remove();
+                });
+            }
+            
+            selectedPiece = null;
+            possibleMoves = [];
+        }
+
+        // Calculate possible moves for a piece
+        function calculatePossibleMoves(row, col, pieceType) {
+            const moves = [];
+            const board = document.getElementById(getCurrentBoardId());
+            
+            switch(pieceType) {
+                case 'P': // Pawn
+                    // White pawn moves forward
+                    if (row > 0) {
+                        // Check square in front
+                        const frontSquare = getSquare(board, row - 1, col);
+                        if (!frontSquare.querySelector('.piece')) {
+                            moves.push({row: row - 1, col: col, isCapture: false});
+                            
+                            // Check two squares in front on first move
+                            if (row === 6 && !getSquare(board, row - 2, col).querySelector('.piece')) {
+                                moves.push({row: row - 2, col: col, isCapture: false});
+                            }
+                        }
+                    }
+                    
+                    // Check diagonal captures
+                    if (row > 0 && col > 0) {
+                        const leftDiagSquare = getSquare(board, row - 1, col - 1);
+                        const leftDiagPiece = leftDiagSquare.querySelector('.piece');
+                        if (leftDiagPiece && leftDiagPiece.dataset.piece.startsWith('b')) {
+                            moves.push({row: row - 1, col: col - 1, isCapture: true});
+                        }
+                    }
+                    
+                    if (row > 0 && col < 7) {
+                        const rightDiagSquare = getSquare(board, row - 1, col + 1);
+                        const rightDiagPiece = rightDiagSquare.querySelector('.piece');
+                        if (rightDiagPiece && rightDiagPiece.dataset.piece.startsWith('b')) {
+                            moves.push({row: row - 1, col: col + 1, isCapture: true});
+                        }
+                    }
+                    break;
+                    
+                case 'R': // Rook
+                    // Horizontal and vertical moves
+                    addStraightMoves(board, row, col, moves);
+                    break;
+                    
+                case 'N': // Knight
+                    // All L-shaped moves
+                    const knightMoves = [
+                        {row: row - 2, col: col - 1},
+                        {row: row - 2, col: col + 1},
+                        {row: row - 1, col: col - 2},
+                        {row: row - 1, col: col + 2},
+                        {row: row + 1, col: col - 2},
+                        {row: row + 1, col: col + 2},
+                        {row: row + 2, col: col - 1},
+                        {row: row + 2, col: col + 1}
+                    ];
+                    
+                    knightMoves.forEach(move => {
+                        if (move.row >= 0 && move.row <= 7 && move.col >= 0 && move.col <= 7) {
+                            const square = getSquare(board, move.row, move.col);
+                            const piece = square.querySelector('.piece');
+                            if (!piece || piece.dataset.piece.startsWith('b')) {
+                                moves.push({
+                                    row: move.row,
+                                    col: move.col,
+                                    isCapture: !!piece
+                                });
+                            }
+                        }
+                    });
+                    break;
+                    
+                case 'B': // Bishop
+                    // Diagonal moves
+                    addDiagonalMoves(board, row, col, moves);
+                    break;
+                    
+                case 'Q': // Queen
+                    // Combination of rook and bishop moves
+                    addStraightMoves(board, row, col, moves);
+                    addDiagonalMoves(board, row, col, moves);
+                    break;
+                    
+                case 'K': // King
+                    // All 8 surrounding squares
+                    for (let r = Math.max(0, row - 1); r <= Math.min(7, row + 1); r++) {
+                        for (let c = Math.max(0, col - 1); c <= Math.min(7, col + 1); c++) {
+                            if (r !== row || c !== col) {
+                                const square = getSquare(board, r, c);
+                                const piece = square.querySelector('.piece');
+                                if (!piece || piece.dataset.piece.startsWith('b')) {
+                                    moves.push({
+                                        row: r,
+                                        col: c,
+                                        isCapture: !!piece
+                                    });
+                                }
+                            }
+                        }
+                    }
+                    break;
+            }
+            
+            return moves;
+        }
+
+        // Add straight moves (for rook and queen)
+        function addStraightMoves(board, row, col, moves) {
+            // Up
+            for (let r = row - 1; r >= 0; r--) {
+                const square = getSquare(board, r, col);
+                const piece = square.querySelector('.piece');
+                if (piece) {
+                    if (piece.dataset.piece.startsWith('b')) {
+                        moves.push({row: r, col: col, isCapture: true});
+                    }
+                    break;
+                }
+                moves.push({row: r, col: col, isCapture: false});
+            }
+            
+            // Down
+            for (let r = row + 1; r <= 7; r++) {
+                const square = getSquare(board, r, col);
+                const piece = square.querySelector('.piece');
+                if (piece) {
+                    if (piece.dataset.piece.startsWith('b')) {
+                        moves.push({row: r, col: col, isCapture: true});
+                    }
+                    break;
+                }
+                moves.push({row: r, col: col, isCapture: false});
+            }
+            
+            // Left
+            for (let c = col - 1; c >= 0; c--) {
+                const square = getSquare(board, row, c);
+                const piece = square.querySelector('.piece');
+                if (piece) {
+                    if (piece.dataset.piece.startsWith('b')) {
+                        moves.push({row: row, col: c, isCapture: true});
+                    }
+                    break;
+                }
+                moves.push({row: row, col: c, isCapture: false});
+            }
+            
+            // Right
+            for (let c = col + 1; c <= 7; c++) {
+                const square = getSquare(board, row, c);
+                const piece = square.querySelector('.piece');
+                if (piece) {
+                    if (piece.dataset.piece.startsWith('b')) {
+                        moves.push({row: row, col: c, isCapture: true});
+                    }
+                    break;
+                }
+                moves.push({row: row, col: c, isCapture: false});
+            }
+        }
+
+        // Add diagonal moves (for bishop and queen)
+        function addDiagonalMoves(board, row, col, moves) {
+            // Up-left
+            for (let r = row - 1, c = col - 1; r >= 0 && c >= 0; r--, c--) {
+                const square = getSquare(board, r, c);
+                const piece = square.querySelector('.piece');
+                if (piece) {
+                    if (piece.dataset.piece.startsWith('b')) {
+                        moves.push({row: r, col: c, isCapture: true});
+                    }
+                    break;
+                }
+                moves.push({row: r, col: c, isCapture: false});
+            }
+            
+            // Up-right
+            for (let r = row - 1, c = col + 1; r >= 0 && c <= 7; r--, c++) {
+                const square = getSquare(board, r, c);
+                const piece = square.querySelector('.piece');
+                if (piece) {
+                    if (piece.dataset.piece.startsWith('b')) {
+                        moves.push({row: r, col: c, isCapture: true});
+                    }
+                    break;
+                }
+                moves.push({row: r, col: c, isCapture: false});
+            }
+            
+            // Down-left
+            for (let r = row + 1, c = col - 1; r <= 7 && c >= 0; r++, c--) {
+                const square = getSquare(board, r, c);
+                const piece = square.querySelector('.piece');
+                if (piece) {
+                    if (piece.dataset.piece.startsWith('b')) {
+                        moves.push({row: r, col: c, isCapture: true});
+                    }
+                    break;
+                }
+                moves.push({row: r, col: c, isCapture: false});
+            }
+            
+            // Down-right
+            for (let r = row + 1, c = col + 1; r <= 7 && c <= 7; r++, c++) {
+                const square = getSquare(board, r, c);
+                const piece = square.querySelector('.piece');
+                if (piece) {
+                    if (piece.dataset.piece.startsWith('b')) {
+                        moves.push({row: r, col: c, isCapture: true});
+                    }
+                    break;
+                }
+                moves.push({row: r, col: c, isCapture: false});
+            }
+        }
+
+        // Show possible moves on the board
+        function showPossibleMoves(moves) {
+            const board = selectedPiece.square.parentElement;
+            
+            moves.forEach(move => {
+                const square = getSquare(board, move.row, move.col);
+                const indicator = document.createElement('div');
+                indicator.className = move.isCapture ? 'possible-capture' : 'possible-move';
+                square.appendChild(indicator);
+            });
+        }
+
+        // Make a move
+        function makeMove(row, col) {
+            const board = selectedPiece.square.parentElement;
+            const targetSquare = getSquare(board, row, col);
+            
+            // Remove captured piece if any
+            const targetPiece = targetSquare.querySelector('.piece');
+            if (targetPiece) {
+                targetPiece.remove();
+            }
+            
+            // Move the selected piece
+            selectedPiece.element.remove();
+            targetSquare.appendChild(selectedPiece.element);
+            
+            // Clear selection
+            clearSelection();
+        }
+
+        // Get square by coordinates
+        function getSquare(board, row, col) {
+            return board.querySelector(`.square[data-row="${row}"][data-col="${col}"]`);
+        }
+
+        // Get current board ID based on active tutorial step
+        function getCurrentBoardId() {
+            switch(currentPieceStep) {
+                case 1: return 'pawn-board';
+                case 2: return 'rook-board';
+                case 3: return 'knight-board';
+                case 4: return 'bishop-board';
+                case 5: return 'queen-board';
+                case 6: return 'king-board';
+                default: return 'pawn-board';
+            }
+        }
+
+        // Show pawn moves (button click handler)
+        function showPawnMoves() {
+            const board = document.getElementById('pawn-board');
+            const pawnSquare = board.querySelector('.square .piece[data-piece="wP"]').parentElement;
+            const pawnElement = pawnSquare.querySelector('.piece');
+            
+            selectPiece(pawnSquare, pawnElement);
+        }
+
+        // Show rook moves (button click handler)
+        function showRookMoves() {
+            const board = document.getElementById('rook-board');
+            const rookSquare = board.querySelector('.square .piece[data-piece="wR"]').parentElement;
+            const rookElement = rookSquare.querySelector('.piece');
+            
+            selectPiece(rookSquare, rookElement);
+        }
+
+        // Show knight moves (button click handler)
+        function showKnightMoves() {
+            const board = document.getElementById('knight-board');
+            const knightSquare = board.querySelector('.square .piece[data-piece="wN"]').parentElement;
+            const knightElement = knightSquare.querySelector('.piece');
+            
+            selectPiece(knightSquare, knightElement);
+        }
+
+        // Show bishop moves (button click handler)
+        function showBishopMoves() {
+            const board = document.getElementById('bishop-board');
+            const bishopSquare = board.querySelector('.square .piece[data-piece="wB"]').parentElement;
+            const bishopElement = bishopSquare.querySelector('.piece');
+            
+            selectPiece(bishopSquare, bishopElement);
+        }
+
+        // Show queen moves (button click handler)
+        function showQueenMoves() {
+            const board = document.getElementById('queen-board');
+            const queenSquare = board.querySelector('.square .piece[data-piece="wQ"]').parentElement;
+            const queenElement = queenSquare.querySelector('.piece');
+            
+            selectPiece(queenSquare, queenElement);
+        }
+
+        // Show king moves (button click handler)
+        function showKingMoves() {
+            const board = document.getElementById('king-board');
+            const kingSquare = board.querySelector('.square .piece[data-piece="wK"]').parentElement;
+            const kingElement = kingSquare.querySelector('.piece');
+            
+            selectPiece(kingSquare, kingElement);
+        }
+
+        // Reset pawn board
+        function resetPawnBoard() {
+            initializeBoard('pawn-board', [
+                ['', '', '', '', '', '', '', ''],
+                ['', '', '', '', '', '', '', ''],
+                ['', '', '', '', '', '', '', ''],
+                ['', '', '', 'wP', '', '', '', ''],
+                ['', '', 'bP', '', 'bP', '', '', ''],
+                ['', '', '', '', '', '', '', ''],
+                ['', '', '', '', '', '', '', ''],
+                ['', '', '', '', '', '', '', '']
+            ]);
+        }
+
+        // Reset rook board
+        function resetRookBoard() {
+            initializeBoard('rook-board', [
+                ['', '', '', '', '', '', '', ''],
+                ['', '', '', '', '', '', '', ''],
+                ['', '', '', '', '', '', '', ''],
+                ['', '', '', 'wR', '', '', '', ''],
+                ['', '', 'bP', '', 'bP', '', '', ''],
+                ['', '', '', '', '', '', '', ''],
+                ['', '', '', '', '', '', '', ''],
+                ['', '', '', '', '', '', '', '']
+            ]);
+        }
+
+        // Reset knight board
+        function resetKnightBoard() {
+            initializeBoard('knight-board', [
+                ['', '', '', '', '', '', '', ''],
+                ['', '', '', '', '', '', '', ''],
+                ['', '', '', '', '', '', '', ''],
+                ['', '', '', 'wN', '', '', '', ''],
+                ['', '', 'bP', '', 'bP', '', '', ''],
+                ['', '', '', '', '', '', '', ''],
+                ['', '', '', '', '', '', '', ''],
+                ['', '', '', '', '', '', '', '']
+            ]);
+        }
+
+        // Reset bishop board
+        function resetBishopBoard() {
+            initializeBoard('bishop-board', [
+                ['', '', '', '', '', '', '', ''],
+                ['', '', '', '', '', '', '', ''],
+                ['', '', '', '', '', '', '', ''],
+                ['', '', '', 'wB', '', '', '', ''],
+                ['', '', 'bP', '', 'bP', '', '', ''],
+                ['', '', '', '', '', '', '', ''],
+                ['', '', '', '', '', '', '', ''],
+                ['', '', '', '', '', '', '', '']
+            ]);
+        }
+
+        // Reset queen board
+        function resetQueenBoard() {
+            initializeBoard('queen-board', [
+                ['', '', '', '', '', '', '', ''],
+                ['', '', '', '', '', '', '', ''],
+                ['', '', '', '', '', '', '', ''],
+                ['', '', '', 'wQ', '', '', '', ''],
+                ['', '', 'bP', '', 'bP', '', '', ''],
+                ['', '', '', '', '', '', '', ''],
+                ['', '', '', '', '', '', '', ''],
+                ['', '', '', '', '', '', '', '']
+            ]);
+        }
+
+        // Reset king board
+        function resetKingBoard() {
+            initializeBoard('king-board', [
+                ['', '', '', '', '', '', '', ''],
+                ['', '', '', '', '', '', '', ''],
+                ['', '', '', '', '', '', '', ''],
+                ['', '', '', 'wK', '', '', '', ''],
+                ['', '', 'bP', '', 'bP', '', '', ''],
+                ['', '', '', '', '', '', '', ''],
+                ['', '', '', '', '', '', '', ''],
+                ['', '', '', '', '', '', '', '']
+            ]);
+        }
+
+        // Navigation functions
+        function showSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.section-content').forEach(section => {
+                section.classList.add('hidden');
+            });
+            
+            // Show the selected section
+            document.getElementById(sectionId).classList.remove('hidden');
+            
+            // Update navigation buttons
+            updateNavButtons(sectionId);
+        }
+
+        function updateNavButtons(currentSection) {
+            // Remove active class from all nav buttons
+            document.querySelectorAll('nav button').forEach(button => {
+                button.classList.remove('bg-blue-100', 'text-blue-800', 'font-medium');
+                button.classList.add('hover:bg-gray-100');
+            });
+            
+            // Add active class to current nav button
+            const currentNavButton = document.querySelector(`nav button[onclick="showSection('${currentSection}')"]`);
+            if (currentNavButton) {
+                currentNavButton.classList.add('bg-blue-100', 'text-blue-800', 'font-medium');
+                currentNavButton.classList.remove('hover:bg-gray-100');
+            }
+            
+            // Update progress bar based on current section
+            let progress = 10;
+            switch(currentSection) {
+                case 'pieces': progress = 30; break;
+                case 'moves': progress = 50; break;
+                case 'special': progress = 70; break;
+                case 'practice': progress = 85; break;
+                case 'quiz': progress = 100; break;
+            }
+            updateProgressBar(progress);
+        }
+
+        function updateProgressBar(percentage) {
+            document.getElementById('progress').style.width = percentage + '%';
+            document.querySelector('.progress-bar + p').textContent = percentage + '% completed';
+        }
+
+        // Piece tutorial navigation
+        function nextPieceStep() {
+            if (currentPieceStep < 6) {
+                document.querySelector(`.tutorial-step[data-step="${currentPieceStep}"]`).classList.remove('active');
+                currentPieceStep++;
+                document.querySelector(`.tutorial-step[data-step="${currentPieceStep}"]`).classList.add('active');
+                
+                // Clear any selection when changing steps
+                clearSelection();
+            }
+        }
+
+        function prevPieceStep() {
+            if (currentPieceStep > 1) {
+                document.querySelector(`.tutorial-step[data-step="${currentPieceStep}"]`).classList.remove('active');
+                currentPieceStep--;
+                document.querySelector(`.tutorial-step[data-step="${currentPieceStep}"]`).classList.add('active');
+                
+                // Clear any selection when changing steps
+                clearSelection();
+            }
+        }
+    </script>
+</body>
+</html>
