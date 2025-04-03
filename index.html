@@ -272,7 +272,7 @@
                                         <p>Knights are strongest in the center of the board where they have up to 8 possible moves.</p>
                                     </div>
                                 </div>
-                                <div class="flex flexocol items-center">
+                                <div class="flex flex-col items-center">
                                     <div class="chess-board mb-4" id="knight-board">
                                         <!-- Board for knight demonstration -->
                                     </div>
@@ -864,6 +864,11 @@
         function showPossibleMoves(moves) {
             const board = selectedPiece.square.parentElement;
             
+            // Clear any existing move indicators first
+            board.querySelectorAll('.possible-move, .possible-capture').forEach(indicator => {
+                indicator.remove();
+            });
+            
             moves.forEach(move => {
                 const square = getSquare(board, move.row, move.col);
                 const indicator = document.createElement('div');
@@ -924,6 +929,10 @@
             const rookSquare = board.querySelector('.square .piece[data-piece="wR"]').parentElement;
             const rookElement = rookSquare.querySelector('.piece');
             
+            // Clear any existing selection first
+            clearSelection();
+            
+            // Select the rook piece
             selectPiece(rookSquare, rookElement);
         }
 
