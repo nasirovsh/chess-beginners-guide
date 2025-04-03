@@ -189,8 +189,8 @@
                     <div class="tutorial-steps">
                         <!-- Step 1: Pawn -->
                         <div class="tutorial-step active" data-step="1">
-                            <div class="grid md:grid-cols-2 gap-6">
-                                <div>
+                            <div class="grid md:grid-cols-2 gap-12">
+                                <div class="space-y-4 pr-4">
                                     <h3 class="text-xl font-bold mb-2 flex items-center">
                                         The Pawn 
                                         <span class="ml-2 w-10 h-10 bg-cover" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/4/45/Chess_plt45.svg')"></span>
@@ -206,24 +206,26 @@
                                         <p>Pawns are the only pieces that capture differently than they move.</p>
                                     </div>
                                 </div>
-                                <div class="flex flex-col items-center">
-                                    <div class="chess-board mb-4" id="pawn-board">
+                                <div class="flex flex-col items-center space-y-4">
+                                    <div class="chess-board" id="pawn-board">
                                         <!-- Board for pawn demonstration -->
                                     </div>
-                                    <button onclick="showPawnMoves()" class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700">
-                                        Show Pawn Moves
-                                    </button>
-                                    <button onclick="resetPawnBoard()" class="mt-2 px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700">
-                                        Reset Board
-                                    </button>
+                                    <div class="flex flex-col space-y-2">
+                                        <button onclick="showPawnMoves()" class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700">
+                                            Show Pawn Moves
+                                        </button>
+                                        <button onclick="resetPawnBoard()" class="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700">
+                                            Reset Board
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                         
                         <!-- Step 2: Rook -->
                         <div class="tutorial-step" data-step="2">
-                            <div class="grid md:grid-cols-2 gap-6">
-                                <div>
+                            <div class="grid md:grid-cols-2 gap-12">
+                                <div class="space-y-4 pr-4">
                                     <h3 class="text-xl font-bold mb-2 flex items-center">
                                         The Rook
                                         <span class="ml-2 w-10 h-10 bg-cover" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/7/72/Chess_rlt45.svg')"></span>
@@ -239,24 +241,26 @@
                                         <p>Rooks work best when they're connected (protecting each working) and on open files.</p>
                                     </div>
                                 </div>
-                                <div class="flex flex-col items-center">
-                                    <div class="chess-board mb-4" id="rook-board">
+                                <div class="flex flex-col items-center space-y-4">
+                                    <div class="chess-board" id="rook-board">
                                         <!-- Board for rook demonstration -->
                                     </div>
-                                    <button onclick="showRookMoves()" class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700">
-                                        Show Rook Moves
-                                    </button>
-                                    <button onclick="resetRookBoard()" class="mt-2 px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700">
-                                        Reset Board
-                                    </button>
+                                    <div class="flex flex-col space-y-2">
+                                        <button onclick="showRookMoves()" class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700">
+                                            Show Rook Moves
+                                        </button>
+                                        <button onclick="resetRookBoard()" class="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700">
+                                            Reset Board
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                         
                         <!-- Step 3: Knight -->
                         <div class="tutorial-step" data-step="3">
-                            <div class="grid md:grid-cols-2 gap-6">
-                                <div>
+                            <div class="grid md:grid-cols-2 gap-12">
+                                <div class="space-y-4 pr-4">
                                     <h3 class="text-xl font-bold mb-2 flex items-center">
                                         The Knight 
                                         <span class="ml-2 w-10 h-10 bg-cover" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/7/70/Chess_nlt45.svg')"></span>
@@ -272,24 +276,26 @@
                                         <p>Knights are strongest in the center of the board where they have up to 8 possible moves.</p>
                                     </div>
                                 </div>
-                                <div class="flex flex-col items-center">
-                                    <div class="chess-board mb-4" id="knight-board">
+                                <div class="flex flex-col items-center space-y-4">
+                                    <div class="chess-board" id="knight-board">
                                         <!-- Board for knight demonstration -->
                                     </div>
-                                    <button onclick="showKnightMoves()" class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700">
-                                        Show Knight Moves
-                                    </button>
-                                    <button onclick="resetKnightBoard()" class="mt-2 px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700">
-                                        Reset Board
-                                    </button>
+                                    <div class="flex flex-col space-y-2">
+                                        <button onclick="showKnightMoves()" class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700">
+                                            Show Knight Moves
+                                        </button>
+                                        <button onclick="resetKnightBoard()" class="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700">
+                                            Reset Board
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                         
                         <!-- Step 4: Bishop -->
                         <div class="tutorial-step" data-step="4">
-                            <div class="grid md:grid-cols-2 gap-6">
-                                <div>
+                            <div class="grid md:grid-cols-2 gap-12">
+                                <div class="space-y-4 pr-4">
                                     <h3 class="text-xl font-bold mb-2 flex items-center">
                                         The Bishop
                                         <span class="ml-2 w-10 h-10 bg-cover" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/b/b1/Chess_blt45.svg')"></span>
@@ -305,24 +311,26 @@
                                         <p>A bishop pair (both bishops) is often a strong advantage in open positions.</p>
                                     </div>
                                 </div>
-                                <div class="flex flex-col items-center">
-                                    <div class="chess-board mb-4" id="bishop-board">
+                                <div class="flex flex-col items-center space-y-4">
+                                    <div class="chess-board" id="bishop-board">
                                         <!-- Board for bishop demonstration -->
                                     </div>
-                                    <button onclick="showBishopMoves()" class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700">
-                                        Show Bishop Moves
-                                    </button>
-                                    <button onclick="resetBishopBoard()" class="mt-2 px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700">
-                                        Reset Board
-                                    </button>
+                                    <div class="flex flex-col space-y-2">
+                                        <button onclick="showBishopMoves()" class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700">
+                                            Show Bishop Moves
+                                        </button>
+                                        <button onclick="resetBishopBoard()" class="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700">
+                                            Reset Board
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                         
                         <!-- Step 5: Queen -->
                         <div class="tutorial-step" data-step="5">
-                            <div class="grid md:grid-cols-2 gap-6">
-                                <div>
+                            <div class="grid md:grid-cols-2 gap-12">
+                                <div class="space-y-4 pr-4">
                                     <h3 class="text-xl font-bold mb-2 flex items-center">
                                         The Queen
                                         <span class="ml-2 w-10 h-10 bg-cover" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/1/15/Chess_qlt45.svg')"></span>
@@ -330,7 +338,7 @@
                                     <p class="mb-4">The queen is the most powerful piece in chess.</p>
                                     <ul class="list-disc pl-5 mb-4 space-y-1">
                                         <li>Combines the moves of a rook and bishop</li>
-                                        <li>Can move any number of squares horizontally, vertically,or diagonally</li>
+                                        <li>Can move any number of squares horizontally, vertically, or diagonally</li>
                                         <li>Very valuable - usually not brought out too early to avoid attacks</li>
                                     </ul>
                                     <div class="bg-yellow-50 p-4 rounded-md border border-yellow-200">
@@ -338,24 +346,26 @@
                                         <p>Don't bring your queen out too early - it can be chased around by minor pieces.</p>
                                     </div>
                                 </div>
-                                <div class="flex flex-col items-center">
-                                    <div class="chess-board mb-4" id="queen-board">
+                                <div class="flex flex-col items-center space-y-4">
+                                    <div class="chess-board" id="queen-board">
                                         <!-- Board for queen demonstration -->
                                     </div>
-                                    <button onclick="showQueenMoves()" class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700">
-                                        Show Queen Moves
-                                    </button>
-                                    <button onclick="resetQueenBoard()" class="mt-2 px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700">
-                                        Reset Board
-                                    </button>
+                                    <div class="flex flex-col space-y-2">
+                                        <button onclick="showQueenMoves()" class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700">
+                                            Show Queen Moves
+                                        </button>
+                                        <button onclick="resetQueenBoard()" class="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700">
+                                            Reset Board
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                         
                         <!-- Step 6: King -->
                         <div class="tutorial-step" data-step="6">
-                            <div class="grid md:grid-cols-2 gap-6">
-                                <div>
+                            <div class="grid md:grid-cols-2 gap-12">
+                                <div class="space-y-4 pr-4">
                                     <h3 class="text-xl font-bold mb-2 flex items-center">
                                         The King 
                                         <span class="ml-2 w-10 h-10 bg-cover" style="background-image: url('https://upload.wikimedia.org/wikipedia/commons/4/42/Chess_klt45.svg')"></span>
@@ -371,16 +381,18 @@
                                         <p>In the endgame, the king becomes an active piece and should be centralized.</p>
                                     </div>
                                 </div>
-                                <div class="flex flex-col items-center">
-                                    <div class="chess-board mb-4" id="king-board">
+                                <div class="flex flex-col items-center space-y-4">
+                                    <div class="chess-board" id="king-board">
                                         <!-- Board for king demonstration -->
                                     </div>
-                                    <button onclick="showKingMoves()" class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700">
-                                        Show King Moves
-                                    </button>
-                                    <button onclick="resetKingBoard()" class="mt-2 px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700">
-                                        Reset Board
-                                    </button>
+                                    <div class="flex flex-col space-y-2">
+                                        <button onclick="showKingMoves()" class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700">
+                                            Show King Moves
+                                        </button>
+                                        <button onclick="resetKingBoard()" class="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700">
+                                            Reset Board
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
