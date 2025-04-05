@@ -35,7 +35,12 @@
             background-color: #b58863;
         }
         .highlight {
+            position: absolute;
+            width: 100%;
+            height: 100%;
             background-color: rgba(0, 255, 0, 0.3);
+            z-index: 5;
+            pointer-events: none;
         }
         .possible-move {
             position: absolute;
@@ -1370,7 +1375,15 @@
         // Show center control demonstration
         function showCenterControl() {
             const board = document.getElementById('center-control-demo');
-            const squares = board.querySelectorAll('.square');
+            if (!board) {
+                console.error('Center control board not found');
+                return;
+            }
+            
+            // Clear any existing highlights
+            board.querySelectorAll('.highlight').forEach(highlight => {
+                highlight.remove();
+            });
             
             // Highlight central squares
             const centerSquares = [
@@ -1382,14 +1395,27 @@
             
             centerSquares.forEach(square => {
                 const element = getSquare(board, square.row, square.col);
-                const highlight = document.createElement('div');
-                highlight.className = 'highlight';
-                element.appendChild(highlight);
+                if (element) {
+                    const highlight = document.createElement('div');
+                    highlight.className = 'highlight';
+                    element.appendChild(highlight);
+                }
             });
         }
 
         // Reset center control board
         function resetCenterControl() {
+            const board = document.getElementById('center-control-demo');
+            if (!board) {
+                console.error('Center control board not found');
+                return;
+            }
+            
+            // Clear any existing highlights
+            board.querySelectorAll('.highlight').forEach(highlight => {
+                highlight.remove();
+            });
+            
             initializeBoard('center-control-demo', [
                 ['', '', '', '', '', '', '', ''],
                 ['', '', '', '', '', '', '', ''],
