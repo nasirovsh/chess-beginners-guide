@@ -127,8 +127,8 @@
                         </button>
                     </li>
                     <li>
-                        <button onclick="showSection('moves')" class="w-full text-left px-4 py-2 hover:bg-gray-100 rounded-md">
-                            <i class="fas fa-arrows-alt mr-2"></i> Basic Moves
+                        <button onclick="showSection('strategy')" class="w-full text-left px-4 py-2 hover:bg-gray-100 rounded-md">
+                            <i class="fas fa-chess-knight mr-2"></i> Chess Strategies
                         </button>
                     </li>
                     <li>
@@ -411,11 +411,149 @@
                     </div>
                 </section>
 
-                <!-- Basic Moves Section -->
-                <section id="moves" class="section-content bg-white p-6 rounded-lg shadow-md mb-8 hidden">
-                    <h2 class="text-2xl font-bold mb-4 text-gray-800">Basic Chess Moves</h2>
-                    <!-- Rest of the content remains the same -->
-                    <!-- ... -->
+                <!-- Chess Strategies Section -->
+                <section id="strategy" class="section-content bg-white p-6 rounded-lg shadow-md mb-8 hidden">
+                    <h2 class="text-2xl font-bold mb-4 text-gray-800">Chess Strategies</h2>
+                    
+                    <!-- Introduction -->
+                    <div class="mb-8">
+                        <p class="mb-4">Now that you know how each piece moves, let's learn about fundamental chess concepts and common move patterns that will help you play better.</p>
+                    </div>
+
+                    <!-- Core Concepts -->
+                    <div class="space-y-8">
+                        <!-- Control of the Center -->
+                        <div class="concept-section bg-white p-6 rounded-lg border border-gray-200">
+                            <h3 class="text-xl font-bold mb-3">Controlling the Center</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <p class="mb-4">The center squares (e4, e5, d4, d5) are the most important squares on the board. Controlling these squares gives your pieces more mobility and options.</p>
+                                    <ul class="list-disc pl-5 space-y-2">
+                                        <li>Move pawns to control central squares</li>
+                                        <li>Develop knights to pressure the center</li>
+                                        <li>Control the center to restrict opponent's pieces</li>
+                                    </ul>
+                                    <div class="mt-4 bg-yellow-50 p-4 rounded-md">
+                                        <p class="text-sm"><strong>Pro Tip:</strong> In this position, both sides have developed their pieces to control the center. Notice how the knights and bishops are placed to influence the central squares.</p>
+                                    </div>
+                                </div>
+                                <div class="flex flex-col items-center space-y-4">
+                                    <div class="chess-board mx-auto" id="center-control-demo">
+                                        <!-- Interactive demonstration of center control -->
+                                    </div>
+                                    <div class="flex flex-col space-y-2">
+                                        <button onclick="showCenterControl()" class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700">
+                                            Show Center Control
+                                        </button>
+                                        <button onclick="resetCenterControl()" class="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700">
+                                            Reset Board
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Development -->
+                        <div class="concept-section bg-white p-6 rounded-lg border border-gray-200">
+                            <h3 class="text-xl font-bold mb-3">Piece Development</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <p class="mb-4">Development means moving your pieces from their starting positions to active squares where they control important areas of the board.</p>
+                                    <ul class="list-disc pl-5 space-y-2">
+                                        <li>Develop knights before bishops</li>
+                                        <li>Don't move the same piece twice in the opening</li>
+                                        <li>Castle early to protect your king</li>
+                                        <li>Connect your rooks by moving pieces between them</li>
+                                    </ul>
+                                </div>
+                                <div class="interactive-board" id="development-demo">
+                                    <!-- Interactive demonstration of development -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Common Patterns -->
+                        <div class="concept-section bg-white p-6 rounded-lg border border-gray-200">
+                            <h3 class="text-xl font-bold mb-3">Common Move Patterns</h3>
+                            <div class="space-y-6">
+                                <!-- Fork -->
+                                <div class="pattern-example p-4 bg-gray-50 rounded-lg">
+                                    <h4 class="font-bold mb-2">The Fork</h4>
+                                    <p>A fork is when one piece attacks two or more enemy pieces simultaneously. Knights are especially good at forking.</p>
+                                    <div class="mt-4" id="fork-demo">
+                                        <!-- Interactive fork demonstration -->
+                                    </div>
+                                </div>
+
+                                <!-- Pin -->
+                                <div class="pattern-example p-4 bg-gray-50 rounded-lg">
+                                    <h4 class="font-bold mb-2">The Pin</h4>
+                                    <p>A pin is when a piece can't move because it would expose a more valuable piece to capture. Bishops and rooks are great at creating pins.</p>
+                                    <div class="mt-4" id="pin-demo">
+                                        <!-- Interactive pin demonstration -->
+                                    </div>
+                                </div>
+
+                                <!-- Double Attack -->
+                                <div class="pattern-example p-4 bg-gray-50 rounded-lg">
+                                    <h4 class="font-bold mb-2">The Double Attack</h4>
+                                    <p>A double attack is when you threaten two different things at once, forcing your opponent to deal with both threats.</p>
+                                    <div class="mt-4" id="double-attack-demo">
+                                        <!-- Interactive double attack demonstration -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Pawn Structure -->
+                        <div class="concept-section bg-white p-6 rounded-lg border border-gray-200">
+                            <h3 class="text-xl font-bold mb-3">Pawn Structure</h3>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <div>
+                                    <p class="mb-4">Pawns are the backbone of your position. Good pawn structure provides space and protection for your pieces.</p>
+                                    <ul class="list-disc pl-5 space-y-2">
+                                        <li>Control the center with pawns</li>
+                                        <li>Avoid creating doubled pawns</li>
+                                        <li>Protect your pawns with other pawns</li>
+                                        <li>Create pawn chains for protection</li>
+                                    </ul>
+                                </div>
+                                <div class="interactive-board" id="pawn-structure-demo">
+                                    <!-- Interactive pawn structure demonstration -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Practice Exercises -->
+                    <div class="mt-8 p-6 bg-blue-50 rounded-lg border border-blue-200">
+                        <h3 class="text-xl font-bold mb-4">Practice Exercises</h3>
+                        <p class="mb-4">Try these exercises to practice the concepts you've learned:</p>
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <button onclick="startCenterControl()" class="p-4 bg-white rounded-lg border border-blue-300 hover:bg-blue-50">
+                                Practice Center Control
+                            </button>
+                            <button onclick="startDevelopment()" class="p-4 bg-white rounded-lg border border-blue-300 hover:bg-blue-50">
+                                Practice Development
+                            </button>
+                            <button onclick="startTactics()" class="p-4 bg-white rounded-lg border border-blue-300 hover:bg-blue-50">
+                                Practice Basic Tactics
+                            </button>
+                            <button onclick="startPawnStructure()" class="p-4 bg-white rounded-lg border border-blue-300 hover:bg-blue-50">
+                                Practice Pawn Structure
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Navigation Buttons -->
+                    <div class="mt-8 flex justify-between">
+                        <button onclick="showSection('pieces')" class="px-4 py-2 bg-gray-200 rounded-md hover:bg-gray-300">
+                            <i class="fas fa-arrow-left mr-2"></i> Previous: Chess Pieces
+                        </button>
+                        <button onclick="showSection('special')" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
+                            Next: Special Rules <i class="fas fa-arrow-right ml-2"></i>
+                        </button>
+                    </div>
                 </section>
 
                 <!-- Rest of the sections remain the same -->
@@ -556,6 +694,18 @@
                 ['', '', '', 'wK', '', '', '', ''],
                 ['', '', 'bP', '', 'bP', '', '', ''],
                 ['', '', '', '', '', '', '', ''],
+                ['', '', '', '', '', '', '', ''],
+                ['', '', '', '', '', '', '', '']
+            ]);
+
+            // Initialize center control demonstration board
+            initializeBoard('center-control-demo', [
+                ['', '', '', '', '', '', '', ''],
+                ['', '', '', '', '', '', '', ''],
+                ['', '', '', 'wP', 'wP', '', '', ''],
+                ['', '', '', 'wN', 'wB', '', '', ''],
+                ['', '', '', 'bB', 'bN', '', '', ''],
+                ['', '', '', 'bP', 'bP', '', '', ''],
                 ['', '', '', '', '', '', '', ''],
                 ['', '', '', '', '', '', '', '']
             ]);
@@ -1127,7 +1277,7 @@
             let progress = 10;
             switch(currentSection) {
                 case 'pieces': progress = 30; break;
-                case 'moves': progress = 50; break;
+                case 'strategy': progress = 50; break;
                 case 'special': progress = 70; break;
                 case 'practice': progress = 85; break;
                 case 'quiz': progress = 100; break;
@@ -1215,6 +1365,41 @@
                     initializeBoard(currentBoardId, piecePositions);
                 }
             }
+        }
+
+        // Show center control demonstration
+        function showCenterControl() {
+            const board = document.getElementById('center-control-demo');
+            const squares = board.querySelectorAll('.square');
+            
+            // Highlight central squares
+            const centerSquares = [
+                {row: 3, col: 3}, // d4
+                {row: 3, col: 4}, // e4
+                {row: 4, col: 3}, // d5
+                {row: 4, col: 4}  // e5
+            ];
+            
+            centerSquares.forEach(square => {
+                const element = getSquare(board, square.row, square.col);
+                const highlight = document.createElement('div');
+                highlight.className = 'highlight';
+                element.appendChild(highlight);
+            });
+        }
+
+        // Reset center control board
+        function resetCenterControl() {
+            initializeBoard('center-control-demo', [
+                ['', '', '', '', '', '', '', ''],
+                ['', '', '', '', '', '', '', ''],
+                ['', '', '', 'wP', 'wP', '', '', ''],
+                ['', '', '', 'wN', 'wB', '', '', ''],
+                ['', '', '', 'bB', 'bN', '', '', ''],
+                ['', '', '', 'bP', 'bP', '', '', ''],
+                ['', '', '', '', '', '', '', ''],
+                ['', '', '', '', '', '', '', '']
+            ]);
         }
     </script>
 </body>
