@@ -471,8 +471,18 @@
                                         <li>Connect your rooks by moving pieces between them</li>
                                     </ul>
                                 </div>
-                                <div class="interactive-board" id="development-demo">
-                                    <!-- Interactive demonstration of development -->
+                                <div class="flex flex-col items-center space-y-4">
+                                    <div class="chess-board mx-auto" id="development-demo">
+                                        <!-- Interactive demonstration of development -->
+                                    </div>
+                                    <div class="flex flex-col space-y-2">
+                                        <button onclick="showDevelopment()" class="px-4 py-2 bg-green-600 text-white rounded-md hover:bg-green-700">
+                                            Show Development
+                                        </button>
+                                        <button onclick="resetDevelopment()" class="px-4 py-2 bg-gray-600 text-white rounded-md hover:bg-gray-700">
+                                            Reset Board
+                                        </button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -713,6 +723,18 @@
                 ['', '', '', 'bP', 'bP', '', '', ''],
                 ['', '', '', '', '', '', '', ''],
                 ['', '', '', '', '', '', '', '']
+            ]);
+
+            // Initialize development demonstration board
+            initializeBoard('development-demo', [
+                ['bR', 'bN', 'bB', 'bQ', 'bK', 'bB', 'bN', 'bR'],
+                ['bP', 'bP', 'bP', 'bP', 'bP', 'bP', 'bP', 'bP'],
+                ['', '', '', '', '', '', '', ''],
+                ['', '', '', '', '', '', '', ''],
+                ['', '', '', '', '', '', '', ''],
+                ['', '', '', '', '', '', '', ''],
+                ['wP', 'wP', 'wP', 'wP', 'wP', 'wP', 'wP', 'wP'],
+                ['wR', 'wN', 'wB', 'wQ', 'wK', 'wB', 'wN', 'wR']
             ]);
         }
 
@@ -1425,6 +1447,66 @@
                 ['', '', '', 'bP', 'bP', '', '', ''],
                 ['', '', '', '', '', '', '', ''],
                 ['', '', '', '', '', '', '', '']
+            ]);
+        }
+
+        // Show development demonstration
+        function showDevelopment() {
+            const board = document.getElementById('development-demo');
+            if (!board) {
+                console.error('Development board not found');
+                return;
+            }
+            
+            // Clear any existing highlights
+            board.querySelectorAll('.highlight').forEach(highlight => {
+                highlight.remove();
+            });
+            
+            // Highlight key development squares
+            const developmentSquares = [
+                {row: 6, col: 3}, // d2 - pawn
+                {row: 6, col: 4}, // e2 - pawn
+                {row: 7, col: 1}, // b1 - knight
+                {row: 7, col: 6}, // g1 - knight
+                {row: 7, col: 2}, // c1 - bishop
+                {row: 7, col: 5}, // f1 - bishop
+                {row: 7, col: 0}, // a1 - rook
+                {row: 7, col: 7}  // h1 - rook
+            ];
+            
+            developmentSquares.forEach(square => {
+                const element = getSquare(board, square.row, square.col);
+                if (element) {
+                    const highlight = document.createElement('div');
+                    highlight.className = 'highlight';
+                    element.appendChild(highlight);
+                }
+            });
+        }
+
+        // Reset development board
+        function resetDevelopment() {
+            const board = document.getElementById('development-demo');
+            if (!board) {
+                console.error('Development board not found');
+                return;
+            }
+            
+            // Clear any existing highlights
+            board.querySelectorAll('.highlight').forEach(highlight => {
+                highlight.remove();
+            });
+            
+            initializeBoard('development-demo', [
+                ['bR', 'bN', 'bB', 'bQ', 'bK', 'bB', 'bN', 'bR'],
+                ['bP', 'bP', 'bP', 'bP', 'bP', 'bP', 'bP', 'bP'],
+                ['', '', '', '', '', '', '', ''],
+                ['', '', '', '', '', '', '', ''],
+                ['', '', '', '', '', '', '', ''],
+                ['', '', '', '', '', '', '', ''],
+                ['wP', 'wP', 'wP', 'wP', 'wP', 'wP', 'wP', 'wP'],
+                ['wR', 'wN', 'wB', 'wQ', 'wK', 'wB', 'wN', 'wR']
             ]);
         }
     </script>
